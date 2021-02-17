@@ -27,7 +27,7 @@ class MemoryPoint {
       'answer': answer,
       'lat': lat,
       'long': long,
-      'memorypath': memoryPathId
+      'memorypathid': memoryPathId
     };
   }
 }

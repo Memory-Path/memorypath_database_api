@@ -1,7 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:memorypath_db_api/MemoryPath.dart';
 import 'package:memorypath_db_api/MemoryPathDb_api.dart';
 import 'package:memorypath_db_api/MemoryPoint.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
+
 
 class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
 
@@ -25,28 +29,41 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   static const String LONG_MEMORYPOINT = 'long';
   static const String MEMORYPATHID_MEMORYPOINT = 'memorypathid';
 
-  //Instantiate Database unless there is one
-  Future<Database> getDb() async {
+  //Initialize a new Database
+  // - different operations depending on Platform
+  Future<void> initDb(context) async {
     if (db!=null){
-      return db;
+      return;
     }
-    db = await initDb();
-    return db;
+    if (context==null||Theme.of(context).platform == TargetPlatform.windows||Theme.of(context).platform == TargetPlatform.linux){
+      sqfliteFfiInit();
+      var databaseFactory = databaseFactoryFfi;
+      try {
+        db = await databaseFactory.openDatabase(inMemoryDatabasePath);
+      }
+      catch (e) {
+        print("Error creating database");
+      }
+
+    }
+    else {
+      String path = await getDatabasesPath() + DB_NAME;
+      db = await openDatabase(
+        path,
+        //Version needed?
+        //version: VERSION,
+      );
+    }
+    return db.execute(
+      "CREATE TABLE $TABLE_MEMORYPATHS($ID_MEMORYPATH INTEGER PRIMARY KEY, $NAME_MEMORYPATH TEXT, $TOPIC_MEMORYPATH TEXT); "
+          "CREATE TABLE $TABLE_MEMORYPOINTS($ID_MEMORYPOINT INTEGER PRIMARY KEY, $IMAGE_MEMORYPOINT TEXT, $QUESTION_MEMORYPOINT TEXT, $ANSWER_MEMORYPOINT TEXT, $LAT_MEMORYPOINT REAL, $LONG_MEMORYPOINT REAL, $MEMORYPATHID_MEMORYPOINT INTEGER)",
+    );
   }
 
-  //Initialize a new Database
-  Future<Database> initDb() async {
-    String path = await getDatabasesPath() + DB_NAME;
-    return await openDatabase(
-      path,
-      onCreate: (db, version) {
-        return db.execute(
-          "CREATE TABLE $TABLE_MEMORYPATHS($ID_MEMORYPATH INTEGER PRIMARY KEY, $NAME_MEMORYPATH TEXT, $TOPIC_MEMORYPATH TEXT); "
-              "CREATE TABLE $TABLE_MEMORYPOINTS($ID_MEMORYPOINT INTEGER PRIMARY KEY, $IMAGE_MEMORYPOINT TEXT, $QUESTION_MEMORYPOINT TEXT, $ANSWER_MEMORYPOINT TEXT, $LAT_MEMORYPOINT INTEGER, $LONG_MEMORYPOINT INTEGER, $MEMORYPATHID_MEMORYPOINT INTEGER)",
-        );
-      },
-      version: VERSION,
-    );
+  @override
+  Future<void> deleteDb() {
+      db.close();
+      return deleteDatabase(db.path);
   }
 
   //get MemoryPath from MemoryPath-Table and all its belonging MemoryPoints from MemoryPoints-Table
@@ -64,7 +81,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
         where: '$MEMORYPATHID_MEMORYPOINT = ?',
         whereArgs: [id]
     );
-    List<MemoryPoint> memoryPoints;
+    List<MemoryPoint> memoryPoints = List.empty(growable: true);
     memoryPointMap.forEach((memoryPoint) {
       memoryPoints.add(MemoryPoint.fromMap(memoryPoint));
     });
@@ -99,7 +116,6 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   @override
   Future<void> insertMemoryPath(MemoryPath memoryPath) async {
     final dbClient = db;
-    //encrypt MemoryPath
     await dbClient.insert(TABLE_MEMORYPATHS, memoryPath.toMap());
     memoryPath.memoryPoints.forEach((memoryPoint) async {
       await dbClient.insert(TABLE_MEMORYPOINTS, memoryPoint.toMap(memoryPath.id));
@@ -110,7 +126,6 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   //delete all data from the old MemoryPath and insert new one
   @override
   Future<void> updateMemoryPath(MemoryPath memoryPath) async {
-    //encrypt MemoryPAth
     await deleteMemoryPath(memoryPath.id);
     await insertMemoryPath(memoryPath);
   }
@@ -118,7 +133,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   @override
   Future<List<MemoryPath>> getAllMemoryPaths() async {
     final dbClient = db;
-    List<MemoryPath> memoryPaths;
+    List<MemoryPath> memoryPaths = List.empty(growable: true);
     //Retrieve all MemoryPaths
     List<Map<String,dynamic>> memoryPathMap = await dbClient.query(TABLE_MEMORYPATHS);
     //Iterate through MemoryPath-List
@@ -128,7 +143,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
           where: '$MEMORYPATHID_MEMORYPOINT = ?',
           whereArgs: [memoryPath["$ID_MEMORYPATH"]]
       );
-      List<MemoryPoint> memoryPoints;
+      List<MemoryPoint> memoryPoints = List.empty(growable: true);
       memoryPointMap.forEach((memoryPoint) {
         memoryPoints.add(MemoryPoint.fromMap(memoryPoint));
       });
@@ -137,4 +152,6 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
     });
     return memoryPaths;
   }
+
+
 }
