@@ -6,7 +6,6 @@ import 'package:memorypath_db_api/MemoryPoint.dart';
 main(){
   test("Insert and get a MemoryPath without MemoryPoints",() async {
     //arrange
-    TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
     await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
@@ -22,7 +21,6 @@ main(){
   });
   test("Insert and get a MemoryPath with 1 MemoryPoint",() async {
     //arrange
-    TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
     await databaseSqflite.initDb();
     MemoryPoint memoryPoint = MemoryPoint(id:1, image:"/xy", question:"What do you want to do?", answer:"Testing!", lat:1.00, long:1.00);
@@ -45,7 +43,6 @@ main(){
   });
   test("Insert, update and get a MemoryPath without MemoryPoints",() async {
     //arrange
-    TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
     await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
