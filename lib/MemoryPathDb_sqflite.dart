@@ -33,7 +33,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   //Initialize a new Database
   // - different operations depending on Platform
   Future<void> initDb({context}) async {
-    if (db!=null){
+    if (db!=null&&db.isOpen){
       return;
     }
     if (context==null||Theme.of(context).platform == TargetPlatform.windows||Theme.of(context).platform == TargetPlatform.linux){

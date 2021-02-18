@@ -4,10 +4,17 @@ import 'package:memorypath_db_api/MemoryPathDb_sqflite.dart';
 import 'package:memorypath_db_api/MemoryPoint.dart';
 
 main(){
+  MemoryPathDatabaseSqflite databaseSqflite;
+  setUp(() async {
+    databaseSqflite = new MemoryPathDatabaseSqflite();
+    await databaseSqflite.initDb();
+  });
+  tearDown(() async {
+    await databaseSqflite.deleteDb();
+    databaseSqflite = null;
+  });
   test("Insert and get a MemoryPath without MemoryPoints",() async {
     //arrange
-    MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
     //act
@@ -17,12 +24,9 @@ main(){
     expect(memoryPathExpected.id, memoryPath.id);
     expect(memoryPathExpected.name, memoryPath.name);
     expect(memoryPathExpected.topic, memoryPath.topic);
-    await databaseSqflite.deleteDb();
   });
   test("Insert and get a MemoryPath with 1 MemoryPoint",() async {
     //arrange
-    MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb();
     MemoryPoint memoryPoint = MemoryPoint(id:1, image:"/xy", question:"What do you want to do?", answer:"Testing!", lat:1.00, long:1.00);
     List<MemoryPoint> memoryPoints = List.filled(1,memoryPoint);
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
@@ -39,12 +43,9 @@ main(){
     expect(memoryPathExpected.memoryPoints.first.answer, memoryPath.memoryPoints.first.answer);
     expect(memoryPathExpected.memoryPoints.first.lat, memoryPath.memoryPoints.first.lat);
     expect(memoryPathExpected.memoryPoints.first.long, memoryPath.memoryPoints.first.long);
-    await databaseSqflite.deleteDb();
   });
   test("Insert, update and get a MemoryPath without MemoryPoints",() async {
     //arrange
-    MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
     MemoryPath memoryPathUpdated = MemoryPath(id: 1, name: "London", topic: "Chemistry", memoryPoints: memoryPoints);
@@ -56,6 +57,5 @@ main(){
     expect(memoryPathExpected.id, memoryPathUpdated.id);
     expect(memoryPathExpected.name, memoryPathUpdated.name);
     expect(memoryPathExpected.topic, memoryPathUpdated.topic);
-    await databaseSqflite.deleteDb();
   });
 }
