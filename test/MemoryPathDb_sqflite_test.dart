@@ -18,7 +18,7 @@ main(){
     expect(memoryPathExpected.id, memoryPath.id);
     expect(memoryPathExpected.name, memoryPath.name);
     expect(memoryPathExpected.topic, memoryPath.topic);
-    databaseSqflite.deleteDb();
+    await databaseSqflite.deleteDb();
   });
   test("Insert and get a MemoryPath with 1 MemoryPoint",() async {
     //arrange
@@ -41,7 +41,7 @@ main(){
     expect(memoryPathExpected.memoryPoints.first.answer, memoryPath.memoryPoints.first.answer);
     expect(memoryPathExpected.memoryPoints.first.lat, memoryPath.memoryPoints.first.lat);
     expect(memoryPathExpected.memoryPoints.first.long, memoryPath.memoryPoints.first.long);
-    databaseSqflite.deleteDb();
+    await databaseSqflite.deleteDb();
   });
   test("Insert, update and get a MemoryPath without MemoryPoints",() async {
     //arrange
@@ -59,6 +59,6 @@ main(){
     expect(memoryPathExpected.id, memoryPathUpdated.id);
     expect(memoryPathExpected.name, memoryPathUpdated.name);
     expect(memoryPathExpected.topic, memoryPathUpdated.topic);
-    databaseSqflite.deleteDb();
+    await databaseSqflite.deleteDb();
   });
 }
