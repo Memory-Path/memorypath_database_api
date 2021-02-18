@@ -8,7 +8,7 @@ main(){
     //arrange
     TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb(null);
+    await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
     //act
@@ -24,7 +24,7 @@ main(){
     //arrange
     TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb(null);
+    await databaseSqflite.initDb();
     MemoryPoint memoryPoint = MemoryPoint(id:1, image:"/xy", question:"What do you want to do?", answer:"Testing!", lat:1.00, long:1.00);
     List<MemoryPoint> memoryPoints = List.filled(1,memoryPoint);
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
@@ -47,7 +47,7 @@ main(){
     //arrange
     TestWidgetsFlutterBinding.ensureInitialized();
     MemoryPathDatabaseSqflite databaseSqflite = MemoryPathDatabaseSqflite();
-    await databaseSqflite.initDb(null);
+    await databaseSqflite.initDb();
     List<MemoryPoint> memoryPoints = List.empty();
     MemoryPath memoryPath = MemoryPath(id: 1, name: "The Way to School", topic: "Biology", memoryPoints: memoryPoints);
     MemoryPath memoryPathUpdated = MemoryPath(id: 1, name: "London", topic: "Chemistry", memoryPoints: memoryPoints);

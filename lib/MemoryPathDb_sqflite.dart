@@ -32,7 +32,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
 
   //Initialize a new Database
   // - different operations depending on Platform
-  Future<void> initDb(context) async {
+  Future<void> initDb({context}) async {
     if (db!=null){
       return;
     }
@@ -57,7 +57,6 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
       } catch (e) {
         throw DatabaseError("Error instantiating Database",e);
       }
-
     }
     try {
       db.execute(
@@ -67,15 +66,17 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
     } catch (e) {
       throw DatabaseError("Error while creating the Tables", e);
     }
-
     return;
   }
 
   @override
-  Future<void> deleteDb() {
+  Future<void> deleteDb({context}) async {
     try {
-      db.close();
-      return deleteDatabase(db.path);
+      await db.close();
+      if (context!=null||Theme.of(context).platform != TargetPlatform.windows||Theme.of(context).platform != TargetPlatform.linux){
+        await deleteDatabase(db.path);
+      }
+      return;
     } catch (e) {
       throw DatabaseError("Error while closing or deleting the Database", e);
     }
@@ -152,7 +153,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   }
 
   @override
-  Future<List<MemoryPath>> getAllMemoryPaths() async {
+  Future<List<MemoryPath>> listMemoryPaths() async {
     List<MemoryPath> memoryPaths = List.empty(growable: true);
     //Retrieve all MemoryPaths
     try {

@@ -1,7 +1,7 @@
 class DatabaseError extends Error {
 
   String message;
-  Error error;
+  dynamic error;
 
   DatabaseError(this.message, this.error);
 
