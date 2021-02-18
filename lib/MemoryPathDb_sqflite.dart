@@ -70,13 +70,9 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   }
 
   @override
-  Future<void> deleteDb({context}) async {
+  Future<void> deleteDb() async {
     try {
-      await db.close();
-      if (context!=null||Theme.of(context).platform != TargetPlatform.windows||Theme.of(context).platform != TargetPlatform.linux){
-        await deleteDatabase(db.path);
-      }
-      return;
+      return await db.close();
     } catch (e) {
       throw DatabaseError("Error while closing or deleting the Database", e);
     }
