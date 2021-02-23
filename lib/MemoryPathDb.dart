@@ -1,15 +1,15 @@
-import 'MemoryPoint.dart';
+import 'MemoryPointDb.dart';
 
-class MemoryPath {
+class MemoryPathDb {
   final int id;
   final String name;
   final String topic;
-  final List<MemoryPoint> memoryPoints;
+  final List<MemoryPointDb> memoryPoints;
 
-  MemoryPath({this.id, this.name, this.topic, this.memoryPoints});
+  MemoryPathDb({this.id, this.name, this.topic, this.memoryPoints});
 
   //Named-Constructor: From Map
-  MemoryPath.fromMap(Map<String,dynamic> memoryPath, List<MemoryPoint> memoryPoints) :
+  MemoryPathDb.fromMap(Map<String,dynamic> memoryPath, List<MemoryPointDb> memoryPoints) :
         id =  memoryPath['id'],
         name =  memoryPath['name'],
         topic = memoryPath['topic'],

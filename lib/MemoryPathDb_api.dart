@@ -1,13 +1,13 @@
-import 'package:memorypath_db_api/MemoryPath.dart';
+import 'package:memorypath_db_api/MemoryPathDb.dart';
 
 abstract class MemoryPathDatabaseApi {
 
   Future<void> initDb({context});
   Future<void> deleteDb();
-  Future<MemoryPath> getMemoryPath(int id);
-  Future<void> insertMemoryPath(MemoryPath memoryPath);
-  Future<void> updateMemoryPath(MemoryPath memoryPath);
+  Future<MemoryPathDb> getMemoryPath(int id);
+  Future<void> insertMemoryPath(MemoryPathDb memoryPath);
+  Future<void> updateMemoryPath(MemoryPathDb memoryPath);
   Future<void> deleteMemoryPath(int id);
-  Future<List<MemoryPath>> listMemoryPaths();
+  Future<List<MemoryPathDb>> listMemoryPaths();
 
 }

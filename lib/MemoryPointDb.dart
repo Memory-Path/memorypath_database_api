@@ -1,4 +1,4 @@
-class MemoryPoint {
+class MemoryPointDb {
 
   final int id;
   final String image;
@@ -7,10 +7,10 @@ class MemoryPoint {
   final double lat;
   final double long;
 
-  MemoryPoint({this.id, this.image, this.question, this.answer, this.lat, this.long});
+  MemoryPointDb({this.id, this.image, this.question, this.answer, this.lat, this.long});
 
   //Named-Constructor: From Map
-  MemoryPoint.fromMap(Map<String,dynamic> memoryPoint) :
+  MemoryPointDb.fromMap(Map<String,dynamic> memoryPoint) :
         id =  memoryPoint['id'],
         image =  memoryPoint['image'],
         question = memoryPoint['question'],

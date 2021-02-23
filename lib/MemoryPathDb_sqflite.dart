@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:memorypath_db_api/DatabaseError.dart';
-import 'package:memorypath_db_api/MemoryPath.dart';
+import 'package:memorypath_db_api/MemoryPathDb.dart';
 import 'package:memorypath_db_api/MemoryPathDb_api.dart';
-import 'package:memorypath_db_api/MemoryPoint.dart';
+import 'package:memorypath_db_api/MemoryPointDb.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -80,7 +80,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
 
   //get MemoryPath from MemoryPath-Table and all its belonging MemoryPoints from MemoryPoints-Table
   @override
-  Future<MemoryPath> getMemoryPath(int id) async {
+  Future<MemoryPathDb> getMemoryPath(int id) async {
     //Retrieve MemoryPath
     try {
       List<Map<String,dynamic>> memoryPathMap = await db.query(
@@ -93,12 +93,12 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
           where: '$MEMORYPATHID_MEMORYPOINT = ?',
           whereArgs: [id]
       );
-      List<MemoryPoint> memoryPoints = List.empty(growable: true);
+      List<MemoryPointDb> memoryPoints = List.empty(growable: true);
       memoryPointMap.forEach((memoryPoint) {
-        memoryPoints.add(MemoryPoint.fromMap(memoryPoint));
+        memoryPoints.add(MemoryPointDb.fromMap(memoryPoint));
       });
       //build and return MemoryPath
-      return MemoryPath.fromMap(memoryPathMap.first, memoryPoints);
+      return MemoryPathDb.fromMap(memoryPathMap.first, memoryPoints);
     } catch (e) {
       throw DatabaseError("Could not retrieve Memory-Path or its Memory-Points", e);
     }
@@ -126,7 +126,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
 
   //add MemoryPath to MemoryPaths-Table and all its MemoryPoints to the MemoryPoints-Table
   @override
-  Future<void> insertMemoryPath(MemoryPath memoryPath) async {
+  Future<void> insertMemoryPath(MemoryPathDb memoryPath) async {
     try{
       await db.insert(TABLE_MEMORYPATHS, memoryPath.toMap());
       memoryPath.memoryPoints.forEach((memoryPoint) async {
@@ -139,7 +139,7 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
 
   //delete all data from the old MemoryPath and insert new one
   @override
-  Future<void> updateMemoryPath(MemoryPath memoryPath) async {
+  Future<void> updateMemoryPath(MemoryPathDb memoryPath) async {
     try {
       await deleteMemoryPath(memoryPath.id);
       await insertMemoryPath(memoryPath);
@@ -149,8 +149,8 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
   }
 
   @override
-  Future<List<MemoryPath>> listMemoryPaths() async {
-    List<MemoryPath> memoryPaths = List.empty(growable: true);
+  Future<List<MemoryPathDb>> listMemoryPaths() async {
+    List<MemoryPathDb> memoryPaths = List.empty(growable: true);
     //Retrieve all MemoryPaths
     try {
       List<Map<String,dynamic>> memoryPathMap = await db.query(TABLE_MEMORYPATHS);
@@ -161,12 +161,12 @@ class MemoryPathDatabaseSqflite extends MemoryPathDatabaseApi{
             where: '$MEMORYPATHID_MEMORYPOINT = ?',
             whereArgs: [memoryPath["$ID_MEMORYPATH"]]
         );
-        List<MemoryPoint> memoryPoints = List.empty(growable: true);
+        List<MemoryPointDb> memoryPoints = List.empty(growable: true);
         memoryPointMap.forEach((memoryPoint) {
-          memoryPoints.add(MemoryPoint.fromMap(memoryPoint));
+          memoryPoints.add(MemoryPointDb.fromMap(memoryPoint));
         });
         //create MemoryPath and add to MemoryPath-List
-        memoryPaths.add(MemoryPath.fromMap(memoryPath, memoryPoints));
+        memoryPaths.add(MemoryPathDb.fromMap(memoryPath, memoryPoints));
       });
       return memoryPaths;
     } catch (e) {
