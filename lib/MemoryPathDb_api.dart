@@ -1,4 +1,4 @@
-import 'package:memorypath_db_api/MemoryPathDb.dart';
+import 'package:memorypath_db_api/src/MemoryPathDb.dart';
 
 abstract class MemoryPathDatabaseApi {
 

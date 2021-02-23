@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:memorypath_db_api/DatabaseError.dart';
-import 'package:memorypath_db_api/MemoryPathDb.dart';
+import 'file:///C:/Users/x/AndroidStudioProjects/memorypath_db_api/lib/src/DatabaseError.dart';
+import 'package:memorypath_db_api/src/MemoryPathDb.dart';
 import 'package:memorypath_db_api/MemoryPathDb_api.dart';
-import 'package:memorypath_db_api/MemoryPointDb.dart';
+import 'package:memorypath_db_api/src/MemoryPointDb.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 

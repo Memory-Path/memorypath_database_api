@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:memorypath_db_api/MemoryPathDb.dart';
+import 'package:memorypath_db_api/src/MemoryPathDb.dart';
 import 'package:memorypath_db_api/MemoryPathDb_sqflite.dart';
-import 'package:memorypath_db_api/MemoryPointDb.dart';
+import 'package:memorypath_db_api/src/MemoryPointDb.dart';
 
 main(){
   MemoryPathDatabaseSqflite databaseSqflite;
