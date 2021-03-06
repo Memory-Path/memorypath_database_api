@@ -17,33 +17,30 @@ class MemoryPointDbAdapter extends TypeAdapter<MemoryPointDb> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MemoryPointDb(
-      id: fields[0] as int,
-      image: fields[1] as String,
-      question: fields[2] as String,
-      answer: fields[3] as String,
-      lat: fields[4] as double,
-      long: fields[5] as double,
-      name: fields[6] as String,
+      image: fields[0] as String,
+      question: fields[1] as String,
+      answer: fields[2] as String,
+      lat: fields[3] as double,
+      long: fields[4] as double,
+      name: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, MemoryPointDb obj) {
     writer
-      ..writeByte(7)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.image)
       ..writeByte(6)
-      ..write(obj.name)
-      ..writeByte(2)
-      ..write(obj.question)
-      ..writeByte(3)
-      ..write(obj.answer)
-      ..writeByte(4)
-      ..write(obj.lat)
+      ..writeByte(0)
+      ..write(obj.image)
       ..writeByte(5)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.question)
+      ..writeByte(2)
+      ..write(obj.answer)
+      ..writeByte(3)
+      ..write(obj.lat)
+      ..writeByte(4)
       ..write(obj.long);
   }
 
