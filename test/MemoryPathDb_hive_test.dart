@@ -82,4 +82,28 @@ main() {
     expect(
         memoryPathRetrieved.memoryPoints.first, memoryPath.memoryPoints.first);
   });
+
+  test("Insert and list MemoryPathDb-Objects", () async {
+    //ARRANGE
+    Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
+    HiveList<MemoryPointDb> memoryPoints;
+    MemoryPathDb memoryPath1 = MemoryPathDb(
+        name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
+    MemoryPathDb memoryPath2 =
+    MemoryPathDb(name: "T", topic: "Chemistry", memoryPoints: memoryPoints);
+    MemoryPathDb memoryPath3 = MemoryPathDb(
+        name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
+    List<MemoryPathDb> memoryPaths = List.of([memoryPath1,memoryPath2, memoryPath3]);
+
+    //ACT
+    await memoryPathBox.add(memoryPath1);
+    await memoryPathBox.add(memoryPath2);
+    await memoryPathBox.add(memoryPath3);
+
+    //ASSET
+    List<MemoryPathDb> memoryPathRetrieved = [];
+    memoryPathRetrieved.addAll(memoryPathBox.values);
+    expect(memoryPathRetrieved, memoryPaths);
+  });
+
 }
