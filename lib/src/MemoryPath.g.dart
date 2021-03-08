@@ -19,7 +19,7 @@ class MemoryPathDbAdapter extends TypeAdapter<MemoryPathDb> {
     return MemoryPathDb(
       name: fields[0] as String,
       topic: fields[1] as String,
-      memoryPoints: (fields[2] as HiveList)?.castHiveList(),
+      memoryPoints: (fields[2] as List)?.cast<MemoryPointDb>(),
     );
   }
 

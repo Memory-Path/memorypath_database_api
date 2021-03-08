@@ -11,7 +11,7 @@ class MemoryPathDb extends HiveObject {
   @HiveField(1)
   String topic;
   @HiveField(2)
-  HiveList<MemoryPointDb> memoryPoints;
+  List<MemoryPointDb> memoryPoints;
 
   MemoryPathDb({this.name, this.topic, this.memoryPoints});
 

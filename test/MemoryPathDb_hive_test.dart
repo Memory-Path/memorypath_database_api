@@ -11,12 +11,11 @@ main() {
     await Hive.close();
     await Hive.deleteBoxFromDisk(HIVE_SETTINGS);
     await Hive.deleteBoxFromDisk(HIVE_MEMORY_PATHS);
-    await Hive.deleteBoxFromDisk(HIVE_MEMORY_POINTS);
   });
   test("Insert, update and get MemoryPathDb", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    HiveList<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb> memoryPoints;
     MemoryPathDb memoryPath = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
 
@@ -33,7 +32,7 @@ main() {
   test("Insert, delete and get MemoryPathDb-Objects", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    HiveList<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb> memoryPoints;
     MemoryPathDb memoryPath1 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath2 =
@@ -56,17 +55,14 @@ main() {
   test("Insert, update on MemoryPathDb-Object and get MemoryPointDb", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    Box memoryPointBox = await Hive.openBox<MemoryPointDb>(HIVE_MEMORY_POINTS);
     MemoryPointDb memoryPoint = MemoryPointDb(
         name: "Point1", image: "", question: "", answer: "", lat: 20, long: 30);
     MemoryPointDb memoryPointChanged = MemoryPointDb(
         name: "Point2", image: "", question: "", answer: "", lat: 20, long: 30);
-    memoryPointBox.add(memoryPoint);
-    memoryPointBox.add(memoryPointChanged);
-    HiveList<MemoryPointDb> memoryPoints =
-        HiveList(memoryPointBox, objects: [memoryPoint]);
-    HiveList<MemoryPointDb> memoryPointsChanged =
-        HiveList(memoryPointBox, objects: [memoryPointChanged]);
+    List<MemoryPointDb> memoryPoints =
+        List.of([memoryPoint]);
+    List<MemoryPointDb> memoryPointsChanged =
+        List.of([memoryPointChanged]);
     MemoryPathDb memoryPath = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     memoryPathBox.add(memoryPath);
@@ -86,7 +82,7 @@ main() {
   test("Insert and list MemoryPathDb-Objects", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    HiveList<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb> memoryPoints;
     MemoryPathDb memoryPath1 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath2 =
@@ -103,7 +99,7 @@ main() {
     //ASSET
     List<MemoryPathDb> memoryPathRetrieved = [];
     memoryPathRetrieved.addAll(memoryPathBox.values);
-    expect(memoryPathRetrieved, memoryPaths);
+    expect(memoryPathRetrieved.first.name, memoryPaths.first.name);
   });
 
 }
