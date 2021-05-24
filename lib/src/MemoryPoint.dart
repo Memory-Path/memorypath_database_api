@@ -16,11 +16,17 @@ class MemoryPointDb extends HiveObject {
   String answer;
   @HiveField(3)
   double lat;
-  @HiveField(6)
+  @HiveField(4)
   double long;
 
-  MemoryPointDb(
-      {this.image, this.question, this.answer, this.lat, this.long, this.name});
+  MemoryPointDb({
+    this.image,
+    this.question,
+    this.answer,
+    this.lat,
+    this.long,
+    this.name,
+  });
 
   factory MemoryPointDb.fromJson(Map<String, dynamic> json) =>
       _$MemoryPointDbFromJson(json);

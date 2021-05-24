@@ -21,7 +21,7 @@ class MemoryPointDbAdapter extends TypeAdapter<MemoryPointDb> {
       question: fields[1] as String,
       answer: fields[2] as String,
       lat: fields[3] as double,
-      long: fields[6] as double,
+      long: fields[4] as double,
       name: fields[5] as String,
     );
   }
@@ -40,7 +40,7 @@ class MemoryPointDbAdapter extends TypeAdapter<MemoryPointDb> {
       ..write(obj.answer)
       ..writeByte(3)
       ..write(obj.lat)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.long);
   }
 

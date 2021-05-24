@@ -15,7 +15,11 @@ class MemoryPathDb extends HiveObject {
   @HiveField(2)
   List<MemoryPointDb> memoryPoints;
 
-  MemoryPathDb({this.name, this.topic, this.memoryPoints});
+  MemoryPathDb({
+    this.name,
+    this.topic,
+    this.memoryPoints,
+  });
 
   factory MemoryPathDb.fromJson(Map<String, dynamic> json) =>
       _$MemoryPathDbFromJson(json);
