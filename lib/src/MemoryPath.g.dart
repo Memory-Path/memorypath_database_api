@@ -45,3 +45,26 @@ class MemoryPathDbAdapter extends TypeAdapter<MemoryPathDb> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+MemoryPathDb _$MemoryPathDbFromJson(Map<String, dynamic> json) {
+  return MemoryPathDb(
+    name: json['name'] as String,
+    topic: json['topic'] as String,
+    memoryPoints: (json['memoryPoints'] as List)
+        ?.map((e) => e == null
+            ? null
+            : MemoryPointDb.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$MemoryPathDbToJson(MemoryPathDb instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'topic': instance.topic,
+      'memoryPoints': instance.memoryPoints,
+    };
