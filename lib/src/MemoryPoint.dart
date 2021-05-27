@@ -1,27 +1,34 @@
 import 'package:hive/hive.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'MemoryPoint.g.dart';
 
 @HiveType(typeId: 1)
-class MemoryPointDb extends HiveObject{
+@JsonSerializable()
+class MemoryPointDb extends HiveObject {
   @HiveField(0)
-  String image;
+  String? image;
   @HiveField(5)
-  String name;
+  String? name;
   @HiveField(1)
-  String question;
+  String? question;
   @HiveField(2)
-  String answer;
+  String? answer;
   @HiveField(3)
-  double lat;
+  double? lat;
   @HiveField(4)
-  double long;
+  double? long;
 
-  MemoryPointDb(
-      {this.image,
-      this.question,
-      this.answer,
-      this.lat,
-      this.long,
-      this.name});
+  MemoryPointDb({
+    this.image,
+    this.question,
+    this.answer,
+    this.lat,
+    this.long,
+    this.name,
+  });
+
+  factory MemoryPointDb.fromJson(Map<String, dynamic> json) =>
+      _$MemoryPointDbFromJson(json);
+  Map<String, dynamic> toJson() => _$MemoryPointDbToJson(this);
 }

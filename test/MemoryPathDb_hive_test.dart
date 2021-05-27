@@ -15,7 +15,7 @@ main() {
   test("Insert, update and get MemoryPathDb", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    List<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb>? memoryPoints;
     MemoryPathDb memoryPath = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
 
@@ -32,7 +32,7 @@ main() {
   test("Insert, delete and get MemoryPathDb-Objects", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    List<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb>? memoryPoints;
     MemoryPathDb memoryPath1 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath2 =
@@ -76,13 +76,13 @@ main() {
     //ASSET
     MemoryPathDb memoryPathRetrieved = memoryPathBox.get(0);
     expect(
-        memoryPathRetrieved.memoryPoints.first, memoryPath.memoryPoints.first);
+        memoryPathRetrieved.memoryPoints!.first, memoryPath.memoryPoints!.first);
   });
 
   test("Insert and list MemoryPathDb-Objects", () async {
     //ARRANGE
     Box memoryPathBox = await Hive.openBox<MemoryPathDb>(HIVE_MEMORY_PATHS);
-    List<MemoryPointDb> memoryPoints;
+    List<MemoryPointDb>? memoryPoints;
     MemoryPathDb memoryPath1 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath2 =
@@ -98,7 +98,7 @@ main() {
 
     //ASSET
     List<MemoryPathDb> memoryPathRetrieved = [];
-    memoryPathRetrieved.addAll(memoryPathBox.values);
+    memoryPathRetrieved.addAll(memoryPathBox.values as Iterable<MemoryPathDb>);
     expect(memoryPathRetrieved.first.name, memoryPaths.first.name);
   });
 
