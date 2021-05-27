@@ -57,9 +57,9 @@ class MemoryPathFile {
     //Gzip encoder
   }*/
 
-  /*factory MemoryPathFile.fromJson(Map<String, dynamic> json) =>
+  factory MemoryPathFile.fromJson(Map<String, dynamic> json) =>
       _$MemoryPathFileFromJson(json);
-  Map<String, dynamic> toJson() => _$MemoryPathFileToJson(this);*/
+  Map<String, dynamic> toJson() => _$MemoryPathFileToJson(this);
 }
 
 @JsonSerializable()
@@ -73,4 +73,8 @@ class MemoryPathFileMetadata {
     required this.createTime,
     required this.fileFormatVersion,
   });
+
+  factory MemoryPathFileMetadata.fromJson(Map<String, dynamic> json) =>
+      _$MemoryPathFileMetadataFromJson(json);
+  Map<String, dynamic> toJson() => _$MemoryPathFileMetadataToJson(this);
 }

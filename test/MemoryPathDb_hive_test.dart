@@ -59,10 +59,8 @@ main() {
         name: "Point1", image: "", question: "", answer: "", lat: 20, long: 30);
     MemoryPointDb memoryPointChanged = MemoryPointDb(
         name: "Point2", image: "", question: "", answer: "", lat: 20, long: 30);
-    List<MemoryPointDb> memoryPoints =
-        List.of([memoryPoint]);
-    List<MemoryPointDb> memoryPointsChanged =
-        List.of([memoryPointChanged]);
+    List<MemoryPointDb> memoryPoints = List.of([memoryPoint]);
+    List<MemoryPointDb> memoryPointsChanged = List.of([memoryPointChanged]);
     MemoryPathDb memoryPath = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     memoryPathBox.add(memoryPath);
@@ -75,8 +73,10 @@ main() {
 
     //ASSET
     MemoryPathDb memoryPathRetrieved = memoryPathBox.get(0);
-    expect(
-        memoryPathRetrieved.memoryPoints!.first, memoryPath.memoryPoints!.first);
+    print(memoryPathRetrieved.memoryPoints!.first.key);
+    print(memoryPathRetrieved.key);
+    expect(memoryPathRetrieved.memoryPoints!.first,
+        memoryPath.memoryPoints!.first);
   });
 
   test("Insert and list MemoryPathDb-Objects", () async {
@@ -86,10 +86,11 @@ main() {
     MemoryPathDb memoryPath1 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath2 =
-    MemoryPathDb(name: "T", topic: "Chemistry", memoryPoints: memoryPoints);
+        MemoryPathDb(name: "T", topic: "Chemistry", memoryPoints: memoryPoints);
     MemoryPathDb memoryPath3 = MemoryPathDb(
         name: "The Way", topic: "Chemistry", memoryPoints: memoryPoints);
-    List<MemoryPathDb> memoryPaths = List.of([memoryPath1,memoryPath2, memoryPath3]);
+    List<MemoryPathDb> memoryPaths =
+        List.of([memoryPath1, memoryPath2, memoryPath3]);
 
     //ACT
     await memoryPathBox.add(memoryPath1);
@@ -101,5 +102,4 @@ main() {
     memoryPathRetrieved.addAll(memoryPathBox.values as Iterable<MemoryPathDb>);
     expect(memoryPathRetrieved.first.name, memoryPaths.first.name);
   });
-
 }
