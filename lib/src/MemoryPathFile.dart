@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:archive/archive.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:memorypath_db_api/memorypath_db_api.dart';
 
@@ -7,6 +8,7 @@ part 'MemoryPathFile.g.dart';
 
 @JsonSerializable()
 class MemoryPathFile {
+  //UInt8List previewImage;
   MemoryPathFileMetadata metadata;
   List<MemoryPathDb> memoryPathData;
   @JsonKey(ignore: true)
@@ -20,42 +22,56 @@ class MemoryPathFile {
 
   /*MemoryPathFile.fromMemoryPaths(
       MemoryPathFileMetadata metadata, List<MemoryPathDb> memoryPaths) {
-    //TODO!
+    //TODO: Implement Constructor from MemoryPaths
   }*/
 
-  //UInt8List previewImage;
-
-  static Future<MemoryPathFile>? decode(Uint8List rawData) {
-    //Decode: ZipDecoder.decodeBytes()
-    //read index.json -> MemoryPathFile.fromJson
-    //Datei mit gleichem Namen in Internal Storage? Prüfsummenalgorithmus über Uint8List des Images : null
-    //save Images
+  static MemoryPathFile? decode(Uint8List rawData) {
+    GZipDecoder gZipDecoder = GZipDecoder();
+    TarDecoder tarDecoder = TarDecoder();
+    try {
+      List<int> decompressedData = gZipDecoder.decodeBytes(rawData);
+      Archive archive = tarDecoder.decodeBytes(decompressedData);
+      ArchiveFile index = archive.first;
+      Map<String, dynamic> json = index.content;
+      Map<String, Uint8List> imageData = Map();
+      for (int i = 1; i < archive.length; i++) {
+        imageData.putIfAbsent(
+            archive.elementAt(i).name, () => archive.elementAt(i).content);
+      }
+      //saveImages(imageData);
+      MemoryPathFile decoded = MemoryPathFile.fromJson(json);
+      decoded.imageData = imageData;
+      return decoded;
+    } catch (e) {
+      throw DatabaseError("File could not be decomposed", e);
+    }
   }
 
   /// encode [MemoryPathDb] to a compressed custom FileFormat for storing and sharing purposes
-/*  Uint8List encode() {
-    final Map<String, dynamic> json = <String, dynamic>{}; //toJson();
-    //Archive archive = Archive();
+  Uint8List encode() {
     final TarEncoder tarEncoder = TarEncoder();
+    Archive archive = Archive();
+    //creating ArchiveFiles and add them to Archive
+    final Map<String, dynamic> json = this.toJson();
     final ArchiveFile index = ArchiveFile('index.json', json.length, json);
-    tarEncoder.add(index);
-    imageData!.forEach((String key, Uint8List value) {
-      final ArchiveFile image =
-          ArchiveFile('assets/' + key, value.length, value);
-      tarEncoder.add(image);
-    });
+    archive.addFile(index);
+    if (imageData!.isNotEmpty) {
+      imageData!.forEach((String key, Uint8List value) {
+        final ArchiveFile image =
+            ArchiveFile('assets/' + key, value.length, value);
+        archive.addFile(image);
+      });
+    }
+    tarEncoder.encode(archive);
     final GZipEncoder gZipEncoder = GZipEncoder();
     return Uint8List.fromList(gZipEncoder.encode(tarEncoder)!);
+  }
 
-    //ArchiveFile assets = ArchiveFile('assets', size, memoryPathData.);
-    //tar ImageFiles
-    //encoder.create('$name.tar');
-    //   encoder.addDirectory(Directory('assets'));
-    //   ArchiveFile index = ArchiveFile(...)
-    //   encoder.addFile(index);
-    //   encoder.close();
-    //Gzip encoder
-  }*/
+  Future<void>? saveImages(Map<String, Uint8List> imageData) {
+    //TODO: Implement saveImages-Method
+    //Datei mit gleichem Namen in Internal Storage? Prüfsummenalgorithmus über Uint8List des Images : null
+    //save Images
+  }
 
   factory MemoryPathFile.fromJson(Map<String, dynamic> json) =>
       _$MemoryPathFileFromJson(json);
